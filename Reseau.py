@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, JSON
+from sqlalchemy import create_engine, Column, Integer, String, JSON
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 # Ouverture de la BDD
@@ -13,7 +13,7 @@ class Element(Base):
     id = Column(Integer, primary_key=True)
     type = Column(String, nullable=False)
     tension = Column(Integer, nullable=False)
-    etat = Column(Boolean, nullable=False)
+    etat = Column(String, nullable=False)
     voisin = Column(JSON)
     topo_poste = Column(String)
 

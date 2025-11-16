@@ -30,6 +30,23 @@ def add_element(type, tension, etat, voisin, topo_poste):
     session.add(nouvel_user)
     session.commit()
 
+# Modification d'un élément
+def update_element(id, type, tension, etat, voisin, topo_poste):
+    user = session.query(Element).get(id)
+    user.type = type
+    user.tension = tension
+    user.etat = etat
+    user.voisin = voisin
+    user.topo_poste = topo_poste
+    session.commit()
+
+# Supression d'un élément
+
+def delete_element(id):
+    user = session.query(Element).get(id)
+    session.delete(user)
+    session.commit()
+
 """
 Lecture des données
 ele = session.query(Element).all()

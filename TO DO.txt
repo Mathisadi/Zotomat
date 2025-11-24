@@ -1,0 +1,7 @@
+A faire :
+
+- Commencer à introduire les RA
+- Schéma des RA avec la topo
+- Introduction des tests des RA programmé en fonction d'une MNV ?
+- Fonction update Database propre avec pandas ou ORM ?
+

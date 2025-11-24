@@ -62,6 +62,34 @@ def poste_en_antenne(id_poste, df):
 
     return len(df_poste_voisin) <= 1
 
+def type_antenne(id_poste, df):
+    # On extrait les voisins du poste hors postes
+    df_voisin = df.loc[id_poste]["voisin"]
+    
+    # On regarde le nombre de prod conso sur le poste
+    nbr_prod = len(df_voisin[(df_voisin["type"] == "Prod") & (df_voisin["etat"] == "ES")])
+    nbr_conso = len(df_voisin[(df_voisin["type"] == "Conso") & (df_voisin["etat"] == "ES")])
+    
+    # On extrait les postes voisins
+    df_poste_voisin = poste_voisin(id_poste, df)
+    
+    # On garde que les postes en antenne
+    nbr_ant_conso = len(df_poste_voisin[(df_poste_voisin["topo_poste"] == "A C")])
+    nbr_ant_prod = len(df_poste_voisin[(df_poste_voisin["topo_poste"] == "A P")])
+    nbr_ant_mixte = len(df_poste_voisin[(df_poste_voisin["topo_poste"] == "A M")])
+    
+    # Logique
+    if nbr_ant_mixte != 0:
+        return "A M"
+    elif (nbr_ant_prod + nbr_prod) != 0 and (nbr_ant_conso + nbr_conso) != 0:
+        return "A M"
+    elif (nbr_ant_prod + nbr_prod) != 0 and (nbr_ant_conso + nbr_conso) == 0:
+        return "A C"
+    elif (nbr_ant_prod + nbr_prod) == 0 and (nbr_ant_conso + nbr_conso) != 0:
+        return "A P"
+    else:
+        return "A"
+
 # Fonction qui met à jour la BDD
 def update_database(df):
     df.to_sql("Element_reseau", "sqlite:///RSO.db", if_exists="replace")
@@ -86,8 +114,11 @@ def antenne_rso(df=data):
 
         # On vérifie si le poste est une antenne 
         if poste_en_antenne(id_poste, df) and df.loc[id_poste]["topo_poste"] == "B":
+            # On cherche le type d'antenne
+            type_ant = type_antenne(id_poste, df)
+            
             # On modifie sa topo
-            df.loc[id_poste, "topo_poste"] = "A"
+            df.loc[id_poste, "topo_poste"] = type_ant
 
             # On ajoute les voisins de ce poste dans la pile
             df_poste_voisin = poste_voisin(id_poste, df)

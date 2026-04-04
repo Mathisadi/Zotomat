@@ -26,6 +26,12 @@ def get_poste_en_antenne(G, bridge):
     return min(composante, key=len)
 
 
+# Fonction qui pour une poche en antenne trouve quel poste du pont est coté antenne
+def poste_cote_antenne(G, bridge, composante):
+    u, v = bridge
+    return u if u in composante else v
+
+
 # Fonction qui pour des postes en antennes détermine quel type d'antenne il s'agit
 def get_type_antenne(G, composante, df=df_poste):
     # On récupére la liste des types de poste de la composante

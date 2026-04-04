@@ -1,7 +1,5 @@
 import pandas as pd
-import numpy as np
 import networkx as nx
-import matplotlib.pyplot as plt
 
 # Ouverture de la BDD Reseau
 df_rso = pd.read_csv("Etat_reseau.csv")
@@ -13,6 +11,7 @@ df_poste = pd.read_csv("Type_poste.csv")
 G = nx.from_pandas_edgelist(
     df_rso, source="Poste_A", target="Poste_B", edge_attr=["Tension", "Etat"]
 )
+
 
 # Fonction qui retourne l'ensemble des postes mis en antenne
 def get_poste_en_antenne(G, bridge):

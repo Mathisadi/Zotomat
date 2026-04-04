@@ -4,12 +4,12 @@ import networkx as nx
 # Ouverture de la BDD Reseau
 df_rso = pd.read_csv("Etat_reseau.csv")
 
-# Ouverture de la BDD Poste
-df_poste = pd.read_csv("Type_poste.csv")
+# On supprime toutes les liaisons HU ou SUAV
+df_rso = df_rso[df_rso["Tension"] == "ES"]
 
 # On crée le graphe a partir de la BDD
 G = nx.from_pandas_edgelist(
-    df_rso, source="Poste_A", target="Poste_B", edge_attr=["Tension", "Etat"]
+    df_rso, source="Poste_A", target="Poste_B", edge_attr="Tension"
 )
 
 
@@ -32,8 +32,12 @@ def poste_cote_antenne(G, bridge, composante):
     return u if u in composante else v
 
 
+# Ouverture de la BDD Poste
+df_poste = pd.read_csv("Type_poste.csv")
+
+
 # Fonction qui pour des postes en antennes détermine quel type d'antenne il s'agit
-def get_type_antenne(G, composante, df=df_poste):
+def get_type_antenne(G, composante, df):
     # On récupére la liste des types de poste de la composante
     types = [df.loc[df["Poste"] == poste]["Type"].values[0] for poste in composante]
 

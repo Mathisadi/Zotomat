@@ -2,7 +2,7 @@ import pandas as pd
 import networkx as nx
 
 # Ouverture de la BDD Reseau
-df_rso = pd.read_csv("Etat_reseau.csv")
+df_rso = pd.read_csv("./data/Etat_reseau.csv")
 
 # On supprime toutes les liaisons HU ou SUAV
 df_rso = df_rso[df_rso["Tension"] == "ES"]
@@ -33,7 +33,7 @@ def poste_cote_antenne(G, bridge, composante):
 
 
 # Ouverture de la BDD Poste
-df_poste = pd.read_csv("Type_poste.csv")
+df_poste = pd.read_csv("./data/Type_poste.csv")
 
 
 # Fonction qui pour des postes en antennes détermine quel type d'antenne il s'agit

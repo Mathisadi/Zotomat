@@ -1,5 +1,3 @@
 Poste,Dep,IC,Mono,RVL,RVB,REB,2RA,RTR
-Saint_chamas,Rognac,False,True,0,1,0,,
-Rognac,Saint_chamas,False,False,1,1,0,,
-Feuillane,Rognac,False,True,0,1,0,,
-Rognac,Feuillane,False,False,1,1,0,,
+Rognac,Roquerousse,False,True,0,1,0,,
+Roquerousse,Rognac,False,False,1,1,0,,

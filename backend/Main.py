@@ -11,9 +11,6 @@ df_rso = pd.read_csv("./data/Etat_reseau.csv")
 # On supprime toutes les liaisons HU ou SUAV
 df_rso = df_rso[df_rso["Etat"] == "ES"]
 
-# Ouverture de la BDD Poste
-df_poste = pd.read_csv("./data/Type_poste.csv")
-
 # On crée le graphe a partir de la BDD
 G = nx.from_pandas_edgelist(
     df_rso, source="Poste_A", target="Poste_B", edge_attr="Tension"
@@ -29,26 +26,26 @@ df_res = pd.DataFrame()
 
 # Fonction qui retourne les RA des postes en antenne
 for bridge in bridge_list:
-    # Postes en antenne
-    arbre = get_poste_en_antenne(G, bridge)
+    # On trouve les postes mis en antenne
+    descendants = get_poste_en_antenne(G, bridge)
     
-    # Pour chaque poste en antenne on trouve le RA
-    for poste_P,poste_F in arbre.edges():
-        # On trouve les descendants du poste Père
-        descendants = get_descendants(arbre, poste_P)
-        
-        # Si c'est un cycle on passe au suivant
-        if descendants is None:
-            continue
+    print(bridge, descendants)
+    print(poste_RG_antenne(bridge, descendants))
+    
+    # On trouve le poste RG et le poste antenne
+    poste_RG, poste_Antenne = poste_RG_antenne(bridge, descendants)
 
-        # On trouve le type d'antenne
-        type_antenne = get_type_antenne_poste(G, descendants, df_poste)
+    # On trouve le type d'antenne
+    type_antenne = get_type_antenne(descendants)
 
-        # On trouve le RA
-        RA = get_RA(poste_P, poste_F, type_antenne)
+    # On trouve le RA
+    RA = get_RA(poste_RG, poste_Antenne, type_antenne)
 
-        # On ajoute les RA à la dataframe
-        df_res = pd.concat([df_res, pd.DataFrame(RA)], ignore_index=True)
+    # On ajoute les RA à la dataframe
+    df_res = pd.concat([df_res, pd.DataFrame(RA)], ignore_index=True)
         
 # On crée le fichier res
 df_res.to_csv("./res/RA.csv", index=False)
+
+
+# Si cest pas un bridge ca sert a rien de reprendre les RA ?
